@@ -13,6 +13,7 @@ public class CloneSkillController : MonoBehaviour
 
     [SerializeField] private Transform attackCheck;
     [SerializeField] private float attackCheckRadius = .8f;
+    private Transform closestEnemy;
 
     private void Awake()
     {
@@ -47,6 +48,8 @@ public class CloneSkillController : MonoBehaviour
         transform.position = _newTransform.position;
         
         cloneTimer = _cloneDuration;
+        
+        FaceClosestTarget();
     }
 
     private void AnimationTrigger()
@@ -65,6 +68,34 @@ public class CloneSkillController : MonoBehaviour
             if (hit.GetComponent<Enemy>() != null)
                 //让这个敌人执行damage（）
                 hit.GetComponent<Enemy>().damage();
+        }
+    }
+//这个方法可以实现克隆体面向距离它最近的一个敌人
+    private void FaceClosestTarget()
+    {
+        //以克隆体的位置为中心生成一个25单位为半径的检测圆圈
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25);
+
+        float closestDistance = Mathf.Infinity;
+        //对于每个在检测区域中的物体进行遍历
+        foreach (var hit in colliders)
+        {
+            if (hit.GetComponent<Enemy>() != null)
+            {//计算克隆体到一个敌人的距离
+                float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
+                //如果计算出的距离要小于之前得到的最小距离则将该敌人设定为最近敌人
+                if (distanceToEnemy < closestDistance)
+                {
+                    closestDistance = distanceToEnemy;
+                    closestEnemy = hit.transform; 
+                }
+            }
+        }
+        if (closestEnemy != null)
+        {
+            //实现转向
+            if(transform.position.x > closestEnemy.position.x)
+                transform.Rotate(0,180,0);
         }
     }
 }

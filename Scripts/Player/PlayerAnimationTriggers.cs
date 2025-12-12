@@ -24,4 +24,9 @@ public class PlayerAnimationTriggers : MonoBehaviour
                 hit.GetComponent<Enemy>().damage();
         }
     }
+//玩家向前丢出宝剑，在关键帧触发
+    private void ThrowSword()
+    {
+        SkillManager.Instance.sword.CreateSword();
+    }
 }

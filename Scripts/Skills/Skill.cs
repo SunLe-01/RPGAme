@@ -7,6 +7,13 @@ public class Skill : MonoBehaviour
     [SerializeField] protected float Cooldown;
     protected float CooldownTimer;
 
+    protected Player player;
+
+    protected virtual void Start()
+    {
+        player = PlayerMangager.Instance.player;
+    }
+
     protected virtual void Update()
     {
         CooldownTimer -= Time.deltaTime;
