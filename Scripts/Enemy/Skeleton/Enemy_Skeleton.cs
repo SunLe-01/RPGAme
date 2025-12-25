@@ -1,23 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy_Skeleton : Enemy
 {
-    #region States
-
-    public SkeletonIdleState idleState { get; private set; }
-
-    public SkeletonMoveState moveState { get; private set; }
-
-    public SkeletonBattleState battleState { get; private set; }
-
-    public SkeletonAttackState attackState { get; private set; }
-    
-    public SkeletonStunnedState stunnedState { get; private set; }
-
-    #endregion
-
     protected override void Awake()
     {
         base.Awake();
@@ -39,10 +23,7 @@ public class Enemy_Skeleton : Enemy
     {
         base.Update();
 
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            stateMachine.ChangeState(stunnedState);
-        }
+        if (Input.GetKeyDown(KeyCode.U)) stateMachine.ChangeState(stunnedState);
     }
 
     public override bool CanBeStunned()
@@ -52,6 +33,21 @@ public class Enemy_Skeleton : Enemy
             stateMachine.ChangeState(stunnedState);
             return true;
         }
+
         return false;
     }
+
+    #region States
+
+    public SkeletonIdleState idleState { get; private set; }
+
+    public SkeletonMoveState moveState { get; private set; }
+
+    public SkeletonBattleState battleState { get; private set; }
+
+    public SkeletonAttackState attackState { get; private set; }
+
+    public SkeletonStunnedState stunnedState { get; private set; }
+
+    #endregion
 }

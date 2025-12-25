@@ -1,17 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ParallaxBackground : MonoBehaviour
 {
+    [SerializeField] private float parallaxEffect;
     private GameObject cam;
 
-    [SerializeField] private float parallaxEffect;
+    private float length;
 
     private float xPosition;
 
-    private float length;       
-    void Start()
+    private void Start()
     {
         cam = GameObject.Find("Main Camera");
 
@@ -20,17 +18,17 @@ public class ParallaxBackground : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        float distanceMoved = cam.transform.position.x * (1 - parallaxEffect);
+        var distanceMoved = cam.transform.position.x * (1 - parallaxEffect);
 
-        float distanceToMove = cam.transform.position.x * parallaxEffect;
+        var distanceToMove = cam.transform.position.x * parallaxEffect;
 
         transform.position = new Vector3(xPosition + distanceToMove, transform.position.y);
 
-        if(distanceMoved > xPosition + length)
+        if (distanceMoved > xPosition + length)
             xPosition = xPosition + length;
-        else if(distanceMoved < xPosition - length)
+        else if (distanceMoved < xPosition - length)
             xPosition = xPosition - length;
     }
 }

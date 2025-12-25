@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillManager : MonoBehaviour
@@ -9,19 +6,20 @@ public class SkillManager : MonoBehaviour
 
     //冲刺技能
     public DashSkill dash { get; private set; }
+
     //克隆技能
     public CloneSkill clone { get; private set; }
-    
+
     public SwordSkill sword { get; private set; }
+    
+    public BlackholeSkill blackhole { get; private set; }
 
     private void Awake()
     {
-        if(Instance != null)
+        if (Instance != null)
             Destroy(Instance.gameObject);
         else
-        {
             Instance = this;
-        }
     }
 
     private void Start()
@@ -29,5 +27,6 @@ public class SkillManager : MonoBehaviour
         dash = GetComponent<DashSkill>();
         clone = GetComponent<CloneSkill>();
         sword = GetComponent<SwordSkill>();
+        blackhole = GetComponent<BlackholeSkill>();
     }
 }

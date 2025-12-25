@@ -1,19 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerDashState : PlayerState
 {
-    public PlayerDashState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName) : base(_player, _stateMachine, _animBoolName)
+    public PlayerDashState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName) : base(_player,
+        _stateMachine, _animBoolName)
     {
     }
 
+    private new Vector3 offset;
+    
     public override void Enter()
     {
         base.Enter();
         //在玩家进行一次冲刺后生成一个克隆体，并且给予当前时刻玩家的transform信息
-        player.skill.clone.CreateClone(player.transform);
-        
+        player.skill.clone.CreateClone(player.transform,offset);
+
         stateTimer = player.dashDuration;
     }
 
@@ -31,11 +32,8 @@ public class PlayerDashState : PlayerState
             stateMachine.ChangeState(player.wallSlide);
 
 
-        player.SetVelocity(player.dashDir* player.dashSpeed, 0);
-         
-        if (stateTimer < 0)
-        { 
-            stateMachine.ChangeState(player.idleState);
-        }
+        player.SetVelocity(player.dashDir * player.dashSpeed, 0);
+
+        if (stateTimer < 0) stateMachine.ChangeState(player.idleState);
     }
 }

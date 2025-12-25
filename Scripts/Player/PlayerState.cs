@@ -1,28 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerState 
+public class PlayerState
 {
-    protected PlayerStateMachine stateMachine;
+    private readonly string animBoolName;
     protected Player player;
 
     protected Rigidbody2D rb;
-
-    [SerializeField]protected float xInput;
-    [SerializeField]protected float yInput;
-
-    private string animBoolName;
+    protected PlayerStateMachine stateMachine;
 
     protected float stateTimer;
 
     protected bool triggerCalled;
 
-    public PlayerState(Player _player,PlayerStateMachine _stateMachine, string _animBoolName)
+    [SerializeField] protected float xInput;
+    [SerializeField] protected float yInput;
+
+    public PlayerState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName)
     {
-        this.stateMachine = _stateMachine;
-        this.player = _player;
-        this.animBoolName = _animBoolName;
+        stateMachine = _stateMachine;
+        player = _player;
+        animBoolName = _animBoolName;
     }
 
     public virtual void Enter()
@@ -41,14 +38,14 @@ public class PlayerState
 
         player.anim.SetFloat("yVelocity", rb.velocity.y);
     }
+
     public virtual void Exit()
     {
         player.anim.SetBool(animBoolName, false);
-
     }
 
     public virtual void AnimationFinishTrigger()
-    { 
+    {
         triggerCalled = true;
     }
 }

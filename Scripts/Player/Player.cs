@@ -1,61 +1,44 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Build;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
-using UnityEngine.iOS;
 
 public class Player : Entity
 {
-    [Header("Attack details")]
-    public Vector2[] attackMovement;
+    [Header("Attack details")] public Vector2[] attackMovement;
 
     public float counterAttackDuration = .2f;
     public float t;
-    public bool isBusy { get; private set; }
-    [Header ("Move info")]
-    [SerializeField] public float moveSpeed = 10f;
-    public float jumpForce ;
+
+    [Header("Move info")] [SerializeField] public float moveSpeed = 10f;
+
+    public float jumpForce;
     public float swordReturnImpact;
 
-    [Header("Dash info")]
-    public float dashSpeed;
+    [Header("Dash info")] public float dashSpeed;
+
     public float dashDuration;
+    public bool isBusy { get; private set; }
     public float dashDir { get; private set; }
 
     public SkillManager skill { get; private set; }
-    public GameObject sword;//{ get; private set; }
+    public GameObject sword { get; private set; }
 
-    #region State
-    public PlayerStateMachine stateMachine { get; private set; }
-    public PlayerIdle idleState { get; private set; }
-    public PlayerMoveState moveState { get; private set; }
-    public PlayerJumpState jumpState { get; private set; }
-    public PlayerAirState airState { get; private set; }
-    public PlayerDashState dashState { get; private set; }
-    public PlayerWallSlideState wallSlide { get; private set; }
-    public PlayerWallJumpState wallJump { get; private set; }
-    public PlayerPrimaryAttackState primaryAttack { get; private set; }
-    public PlayerCounterAttackState counterAttack { get; private set; }
-    public PlayerAimSwordState aimSword{ get; private set; }
-    public PlayerCatchSwordState catchSword { get; private set; }
-    #endregion
     protected override void Awake()
     {
-        base .Awake();
+        base.Awake();
         stateMachine = new PlayerStateMachine();
         idleState = new PlayerIdle(this, stateMachine, "Idle");
         moveState = new PlayerMoveState(this, stateMachine, "Move");
         jumpState = new PlayerJumpState(this, stateMachine, "Jump");
-        airState  = new PlayerAirState(this, stateMachine, "Jump");
+        airState = new PlayerAirState(this, stateMachine, "Jump");
         dashState = new PlayerDashState(this, stateMachine, "Dash");
         wallSlide = new PlayerWallSlideState(this, stateMachine, "WallSlide");
-        wallJump = new PlayerWallJumpState(this, stateMachine,"Jump");
+        wallJump = new PlayerWallJumpState(this, stateMachine, "Jump");
         primaryAttack = new PlayerPrimaryAttackState(this, stateMachine, "Attack");
         counterAttack = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
         aimSword = new PlayerAimSwordState(this, stateMachine, "AimSword");
         catchSword = new PlayerCatchSwordState(this, stateMachine, "CatchSword");
-    }   
+        blackholeState = new PlayerBlackholeState(this,stateMachine, "Jump");
+    }
 
     protected override void Start()
     {
@@ -71,8 +54,8 @@ public class Player : Entity
         base.Update();
         stateMachine.currentState.Update();
         CheckForDashInput();
-       
     }
+
 
     public void AssignNewSword(GameObject _newSword)
     {
@@ -86,7 +69,7 @@ public class Player : Entity
     }
 
     public IEnumerator BusyFor(float _seconds)
-    { 
+    {
         isBusy = true;
 
         yield return new WaitForSeconds(_seconds);
@@ -94,24 +77,42 @@ public class Player : Entity
         isBusy = false;
     }
 
-    public void Animationntrigger() => stateMachine.currentState.AnimationFinishTrigger();
+    public void Animationntrigger()
+    {
+        stateMachine.currentState.AnimationFinishTrigger();
+    }
+
     private void CheckForDashInput()
     {
         if (isWallDetected())
             return;
-        
-        if (Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.Instance.dash.CanUseSkill())
-        { 
 
+        if (Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.Instance.dash.CanUseSkill())
+        {
             dashDir = Input.GetAxisRaw("Horizontal");
 
-            if(dashDir == 0)
+            if (dashDir == 0)
                 dashDir = facingDir;
 
             stateMachine.ChangeState(dashState);
         }
     }
-  
+
+    #region State
+
+    public PlayerStateMachine stateMachine { get; private set; }
+    public PlayerIdle idleState { get; private set; }
+    public PlayerMoveState moveState { get; private set; }
+    public PlayerJumpState jumpState { get; private set; }
+    public PlayerAirState airState { get; private set; }
+    public PlayerDashState dashState { get; private set; }
+    public PlayerWallSlideState wallSlide { get; private set; }
+    public PlayerWallJumpState wallJump { get; private set; }
+    public PlayerPrimaryAttackState primaryAttack { get; private set; }
+    public PlayerCounterAttackState counterAttack { get; private set; }
+    public PlayerAimSwordState aimSword { get; private set; }
+    public PlayerCatchSwordState catchSword { get; private set; }
+    public PlayerBlackholeState blackholeState { get; private set; }
+
+    #endregion
 }
-
-

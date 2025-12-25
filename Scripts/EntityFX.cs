@@ -1,45 +1,41 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EntityFX : MonoBehaviour
 {
-   private SpriteRenderer sr;
+    [Header("FlashFX")] [SerializeField] private float flashDuration;
 
-   [Header("FlashFX")] 
-   [SerializeField] private float flashDuration ;
-   [SerializeField] private Material hitMat;
+    [SerializeField] private Material hitMat;
 
-   private Material originalMat;
+    private Material originalMat;
+    private SpriteRenderer sr;
 
-   private void Start()
-   {
-      sr = GetComponentInChildren<SpriteRenderer>();
-      originalMat = sr.material;
-   }
+    private void Start()
+    {
+        sr = GetComponentInChildren<SpriteRenderer>();
+        originalMat = sr.material;
+    }
 
-   private IEnumerator flashFx()
-   {
-      sr.material = hitMat;
-      
-      yield return new WaitForSeconds(flashDuration);
-      
-      sr.material = originalMat;
-   }
+    private IEnumerator flashFx()
+    {
+        sr.material = hitMat;
 
-   private void RedcolorBlink()
-   {
-      if(sr.color != Color.white)
-         sr.color = Color.white;
-      else
-      {
-         sr.color = Color.red;
-      }
-   }
+        yield return new WaitForSeconds(flashDuration);
 
-   private void CancelRedBlink()
-   {
-      CancelInvoke("RedcolorBlink");
-      sr.color = Color.white;
-   }
+        sr.material = originalMat;
+    }
+
+    private void RedcolorBlink()
+    {
+        if (sr.color != Color.white)
+            sr.color = Color.white;
+        else
+            sr.color = Color.red;
+    }
+
+    private void CancelRedBlink()
+    {
+        CancelInvoke("RedcolorBlink");
+        sr.color = Color.white;
+    }
 }

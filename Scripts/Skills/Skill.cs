@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Skill : MonoBehaviour
@@ -18,7 +16,7 @@ public class Skill : MonoBehaviour
     {
         CooldownTimer -= Time.deltaTime;
     }
-    
+
     public virtual bool CanUseSkill()
     {
         if (CooldownTimer <= 0)
@@ -27,8 +25,9 @@ public class Skill : MonoBehaviour
             CooldownTimer = Cooldown;
             return true;
         }
+
         Debug.Log("Skill is on cooldown");
-        
+
         return false;
     }
 

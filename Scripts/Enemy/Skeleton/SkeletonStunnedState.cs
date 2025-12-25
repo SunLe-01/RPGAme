@@ -1,15 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SkeletonStunnedState : EnemyState
 {
     public Enemy_Skeleton enemy;
-    
-    public SkeletonStunnedState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName,Enemy_Skeleton _enemy) : base(_enemyBase, _stateMachine, _animBoolName)
+
+    public SkeletonStunnedState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName,
+        Enemy_Skeleton _enemy) : base(_enemyBase, _stateMachine, _animBoolName)
     {
-        this.enemy = _enemy;
+        enemy = _enemy;
     }
 
     public override void Update()
@@ -26,19 +24,19 @@ public class SkeletonStunnedState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        
-        enemy.fx.InvokeRepeating("RedcolorBlink",0,0.1f);
-        
+
+        enemy.fx.InvokeRepeating("RedcolorBlink", 0, 0.1f);
+
         stateTimer = enemy.stunnedDuration;
-        
-        rb.velocity = new (-enemy.stunnedDirection.x * enemy.facingDir,enemy.stunnedDirection.y);
+
+        rb.velocity = new Vector2(-enemy.stunnedDirection.x * enemy.facingDir, enemy.stunnedDirection.y);
     }
 
 
     public override void Exit()
     {
         base.Exit();
-        
-        enemy.fx.Invoke("CancelRedBlink",0);
+
+        enemy.fx.Invoke("CancelRedBlink", 0);
     }
 }

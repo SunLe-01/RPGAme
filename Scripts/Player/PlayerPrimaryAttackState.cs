@@ -1,15 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 
 public class PlayerPrimaryAttackState : PlayerState
 {
+    private readonly float comboWindow = 2;
     private int comboCounter;
 
     private float lastTimeAttacked;
-    private float comboWindow = 2;
-    public PlayerPrimaryAttackState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName) : base(_player, _stateMachine, _animBoolName)
+
+    public PlayerPrimaryAttackState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName) : base(
+        _player, _stateMachine, _animBoolName)
     {
     }
 
@@ -17,16 +16,11 @@ public class PlayerPrimaryAttackState : PlayerState
     {
         base.Enter();
 
-        xInput = 0;//我们需要这一行代码来修复一个攻击时方向错误的bug
+        xInput = 0; //我们需要这一行代码来修复一个攻击时方向错误的bug
 
-        if (comboCounter > 2 || Time.time >= lastTimeAttacked + comboWindow)
-        { 
-            comboCounter = 0;
-        }
+        if (comboCounter > 2 || Time.time >= lastTimeAttacked + comboWindow) comboCounter = 0;
 
-        if (comboCounter == 2) { 
-            player.anim.speed = 0.9f;
-        }
+        if (comboCounter == 2) player.anim.speed = 0.9f;
         player.anim.SetInteger("ComboCounter", comboCounter);
 
         #region Choose attack direction
@@ -34,15 +28,12 @@ public class PlayerPrimaryAttackState : PlayerState
         float attackDir = player.facingDir;
 
         #endregion
-        if (xInput != 0)
-        { 
-            attackDir = xInput;
-            }
+
+        if (xInput != 0) attackDir = xInput;
 
         player.SetVelocity(player.attackMovement[comboCounter].x * attackDir, player.attackMovement[comboCounter].y);
 
         stateTimer = .1f;
-
     }
 
     public override void Exit()
@@ -54,16 +45,13 @@ public class PlayerPrimaryAttackState : PlayerState
 
         comboCounter++;
         lastTimeAttacked = Time.time;
-       
     }
+
     public override void Update()
     {
         base.Update();
 
-        if (stateTimer < 0)
-        {
-            player.SetZeroVelocity();
-        }
+        if (stateTimer < 0) player.SetZeroVelocity();
 
         if (triggerCalled)
             stateMachine.ChangeState(player.idleState);
