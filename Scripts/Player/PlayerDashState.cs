@@ -13,7 +13,7 @@ public class PlayerDashState : PlayerState
     {
         base.Enter();
         //在玩家进行一次冲刺后生成一个克隆体，并且给予当前时刻玩家的transform信息
-        player.skill.clone.CreateClone(player.transform,offset);
+        player.skill.clone.CreateCloneOnDashStart();
 
         stateTimer = player.dashDuration;
     }
@@ -22,6 +22,8 @@ public class PlayerDashState : PlayerState
     {
         base.Exit();
 
+        player.skill.clone.CreateCloneOnDashOver();
+        
         player.SetVelocity(0, rb.velocity.y);
     }
 

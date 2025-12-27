@@ -2,14 +2,16 @@ using UnityEngine;
 
 public class PlayerCounterAttackState : PlayerState
 {
-    public PlayerCounterAttackState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName) : base(
-        _player, _stateMachine, _animBoolName)
+    private bool canCreateClone;
+    
+    public PlayerCounterAttackState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName) : base(_player, _stateMachine, _animBoolName)
     {
     }
 
     public override void Enter()
     {
         base.Enter();
+        canCreateClone = true;
         stateTimer = player.counterAttackDuration;
         player.anim.SetBool("SuccessfulCounterAttack", false);
     }
@@ -21,15 +23,25 @@ public class PlayerCounterAttackState : PlayerState
         player.SetZeroVelocity();
 
         var colliders = Physics2D.OverlapCircleAll(player.attackCheck.position, player.attackCheckRadius);
-        //遍历检测到的所有的碰撞体
+
         foreach (var hit in colliders)
-            //如果这个碰撞体上带有Enemy的组件
+        {
+            // 如果检测到敌人，并且敌人可以被击晕
             if (hit.GetComponent<Enemy>() != null)
                 if (hit.GetComponent<Enemy>().CanBeStunned())
                 {
-                    stateTimer = player.counterAttackDuration; //只要是一个大于1的数字即可
+                    stateTimer = player.counterAttackDuration;
                     player.anim.SetBool("SuccessfulCounterAttack", true);
+
+                    if (canCreateClone)
+                    {
+                        canCreateClone = false;
+                        player.skill.clone.CreateCloneOnCounterAttack(hit.transform);  // 修正：传入敌人的Transform
+                    }
+
+                    
                 }
+        }
 
         if (stateTimer < 0 || triggerCalled) stateMachine.ChangeState(player.idleState);
     }

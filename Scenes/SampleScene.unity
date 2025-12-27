@@ -390,7 +390,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -33.05873, y: 3.7698143, z: -10.033893}
+  m_LocalPosition: {x: -33.440834, y: 3.7698143, z: -10.033893}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -459,7 +459,7 @@ Transform:
   m_GameObject: {fileID: 536212934}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.86, y: -2.6, z: 0}
+  m_LocalPosition: {x: 10.04, y: -2.2, z: 0}
   m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1101,7 +1101,7 @@ Transform:
   m_GameObject: {fileID: 1047457376}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -33.05873, y: 3.7698143, z: -10.033893}
+  m_LocalPosition: {x: -33.440834, y: 3.7698143, z: -10.033893}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1184,6 +1184,7 @@ GameObject:
   - component: {fileID: 1149004875}
   - component: {fileID: 1149004876}
   - component: {fileID: 1149004877}
+  - component: {fileID: 1149004878}
   m_Layer: 0
   m_Name: SkillManager
   m_TagString: Untagged
@@ -1247,6 +1248,12 @@ MonoBehaviour:
   clonePrefab: {fileID: 4616064186551038005, guid: f9a96a620387fbd4bb5fd7dda498ec06, type: 3}
   cloneDuration: 1
   canAttack: 1
+  createCloneOnDashStart: 1
+  createCloneOnDashOver: 1
+  canCreateCloneOnCounterAttack: 1
+  canDuplicateClone: 1
+  chanceToDuplicate: 60
+  crystalInsteadOfClone: 1
 --- !u!114 &1149004876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1292,13 +1299,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cooldown: 2
-  amountOfAttacks: 4
+  amountOfAttacks: 7
   cloneCooldown: 0.35
   blackholeDuration: 4
   blackholePrefab: {fileID: 5537015545148301413, guid: 5b65ff2713a6c024f869b6e0904599ae, type: 3}
   shrinkSpeed: 6
   maxSize: 15
   growSpeed: 3
+--- !u!114 &1149004878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149004871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b8799c7732dfcc478f2a16959453527, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Cooldown: 0
+  crystalDuration: 5
+  cystalPrefab: {fileID: 5006015500851010940, guid: bf695338c50dab244af5dac454818bae, type: 3}
+  canExplode: 1
+  cloneInsteadOfCrystal: 0
+  canMoveToEnemy: 1
+  moveSpeed: 4
+  canUseMultiStack: 1
+  amountOfStack: 3
+  multiStackCooldown: 2
+  useTimeWindow: 2.5
+  crystalLeft:
+  - {fileID: 5006015500851010940, guid: bf695338c50dab244af5dac454818bae, type: 3}
+  - {fileID: 5006015500851010940, guid: bf695338c50dab244af5dac454818bae, type: 3}
+  - {fileID: 5006015500851010940, guid: bf695338c50dab244af5dac454818bae, type: 3}
 --- !u!1 &1187691479
 GameObject:
   m_ObjectHideFlags: 0
@@ -1617,6 +1651,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parallaxEffect: 0.9
+--- !u!1001 &1264308764
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3439281876921122796, guid: bf695338c50dab244af5dac454818bae, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -18.894999
+      objectReference: {fileID: 0}
+    - target: {fileID: 3439281876921122796, guid: bf695338c50dab244af5dac454818bae, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.1943722
+      objectReference: {fileID: 0}
+    - target: {fileID: 3439281876921122796, guid: bf695338c50dab244af5dac454818bae, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3439281876921122796, guid: bf695338c50dab244af5dac454818bae, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3439281876921122796, guid: bf695338c50dab244af5dac454818bae, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3439281876921122796, guid: bf695338c50dab244af5dac454818bae, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3439281876921122796, guid: bf695338c50dab244af5dac454818bae, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3439281876921122796, guid: bf695338c50dab244af5dac454818bae, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3439281876921122796, guid: bf695338c50dab244af5dac454818bae, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3439281876921122796, guid: bf695338c50dab244af5dac454818bae, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5006015500851010940, guid: bf695338c50dab244af5dac454818bae, type: 3}
+      propertyPath: m_Name
+      value: Crystal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bf695338c50dab244af5dac454818bae, type: 3}
 --- !u!1 &1343106260
 GameObject:
   m_ObjectHideFlags: 0
@@ -11061,7 +11152,7 @@ Transform:
   m_GameObject: {fileID: 1773012228}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.89, y: -2.6, z: 0}
+  m_LocalPosition: {x: 14.49, y: 1.78, z: 0}
   m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18512,3 +18603,4 @@ SceneRoots:
   - {fileID: 1149004874}
   - {fileID: 1194936124219335384}
   - {fileID: 1203663185}
+  - {fileID: 1264308764}
