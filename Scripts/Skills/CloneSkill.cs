@@ -32,7 +32,7 @@ public class CloneSkill : Skill
         // 克隆一个prefab实体
         var newClone = Instantiate(clonePrefab);
         // 获取生成的克隆体的位置
-        newClone.GetComponent<CloneSkillController>().SetupClone(clonePosition, cloneDuration, canAttack, _offset, FindClosestEnemy(newClone.transform),canDuplicateClone,chanceToDuplicate);
+        newClone.GetComponent<CloneSkillController>().SetupClone(clonePosition, cloneDuration, canAttack, _offset, FindClosestEnemy(newClone.transform),canDuplicateClone,chanceToDuplicate,player);
     }
 
     public void CreateCloneOnDashStart()

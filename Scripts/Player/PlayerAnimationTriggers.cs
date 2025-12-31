@@ -18,8 +18,10 @@ public class PlayerAnimationTriggers : MonoBehaviour
         foreach (var hit in colliders)
             //如果这个碰撞体上带有Enemy的组件
             if (hit.GetComponent<Enemy>() != null)
-                //让这个敌人执行damage（）
-                hit.GetComponent<Enemy>().damage();
+            {
+                EnemyStats _target = hit.GetComponent<EnemyStats>();
+                player.stats.DoDamage(_target);
+            }
     }
 
 //玩家向前丢出宝剑，在关键帧触发

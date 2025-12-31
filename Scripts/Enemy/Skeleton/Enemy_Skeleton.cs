@@ -11,6 +11,7 @@ public class Enemy_Skeleton : Enemy
         battleState = new SkeletonBattleState(this, stateMachine, "move", this);
         attackState = new SkeletonAttackState(this, stateMachine, "Attack", this);
         stunnedState = new SkeletonStunnedState(this, stateMachine, "stunned", this);
+        deadState = new SkeletonDeadState(this, stateMachine, "idle", this);
     }
 
     protected override void Start()
@@ -48,6 +49,14 @@ public class Enemy_Skeleton : Enemy
     public SkeletonAttackState attackState { get; private set; }
 
     public SkeletonStunnedState stunnedState { get; private set; }
+    
+    public SkeletonDeadState deadState { get; private set; }
 
     #endregion
+
+    public override void Die()
+    {
+        base.Die();
+        stateMachine.ChangeState(deadState);
+    }
 }

@@ -12,12 +12,15 @@ public class Player : Entity
 
     public float jumpForce;
     public float swordReturnImpact;
+    private float defaultMoveSpeed;
+    private float defaultJumpForce;
 
-    [Header("Dash info")] public float dashSpeed;
-
+    [Header("Dash info")] 
+    public float dashSpeed;
     public float dashDuration;
     public bool isBusy { get; private set; }
     public float dashDir { get; private set; }
+    private float defaultDashSpeed;
 
     public SkillManager skill { get; private set; }
     public GameObject sword { get; private set; }
@@ -38,6 +41,7 @@ public class Player : Entity
         aimSword = new PlayerAimSwordState(this, stateMachine, "AimSword");
         catchSword = new PlayerCatchSwordState(this, stateMachine, "CatchSword");
         blackholeState = new PlayerBlackholeState(this,stateMachine, "Jump");
+        deadState = new PlayerDeadState(this, stateMachine, "Die");
     }
 
     protected override void Start()
@@ -47,6 +51,10 @@ public class Player : Entity
         skill = SkillManager.Instance;
 
         stateMachine.Initialize(idleState);
+        
+        defaultMoveSpeed = moveSpeed;
+        defaultJumpForce = jumpForce;
+        defaultDashSpeed = dashSpeed;
     }
 
     protected override void Update()
@@ -58,6 +66,24 @@ public class Player : Entity
             skill.crystal.CanUseSkill();
     }
 
+    public override void SlowEntityBy(float _slowPercentage, float _slowDuration)
+    {
+        moveSpeed = moveSpeed * (1 - _slowPercentage);
+        jumpForce = jumpForce * (1 - _slowPercentage);
+        dashSpeed = dashSpeed * (1 - _slowPercentage);
+        anim.speed = anim.speed * (1 - _slowPercentage);
+        
+        Invoke("ReturnDefaultSpeed",_slowDuration);
+    }
+
+    protected override void ReturnDefaultSpeed()
+    {
+        base.ReturnDefaultSpeed();
+        
+        moveSpeed = defaultMoveSpeed;
+        jumpForce = defaultJumpForce;
+        dashSpeed = defaultDashSpeed;
+    }
 
     public void AssignNewSword(GameObject _newSword)
     {
@@ -115,6 +141,14 @@ public class Player : Entity
     public PlayerAimSwordState aimSword { get; private set; }
     public PlayerCatchSwordState catchSword { get; private set; }
     public PlayerBlackholeState blackholeState { get; private set; }
+    public PlayerDeadState deadState { get; private set; }
 
     #endregion
+
+    public override void Die()
+    {
+        base.Die();
+        
+        stateMachine.ChangeState(deadState);
+    }
 }

@@ -18,8 +18,10 @@ public class EnemySkeletonAnimationTrigger : MonoBehaviour
         foreach (var hit in colliders)
             //如果这个碰撞体上带有Enemy的组件
             if (hit.GetComponent<Player>() != null)
-                //让这个敌人执行damage（）
-                hit.GetComponent<Player>().damage();
+            {
+                PlayerStats targetStats = hit.GetComponent<PlayerStats>();
+                enemy.stats.DoDamage(targetStats);
+            }
     }
 
     private void OpenCounterWindow()

@@ -23,6 +23,7 @@ public class Enemy : Entity
     [HideInInspector] public float lastTimeAttacked;
     protected bool canBeStunned;
     public EnemyStateMachine stateMachine { get; private set; }
+    public string lastAnimBoolName { get; private set; }
 
     protected override void Awake()
     {
@@ -50,6 +51,27 @@ public class Enemy : Entity
         Gizmos.DrawLine(transform.position,
             new Vector3(transform.position.x + attackDistance * facingDir, transform.position.y));
         //起点是敌人现在所在的位置，终点是敌人现在的x轴坐标+攻击距离*面朝方向
+    }
+
+    public virtual void AssignLastAnimName(string _animBoolName)
+    {
+        lastAnimBoolName = _animBoolName;
+        
+    }
+
+    protected override void ReturnDefaultSpeed()
+    {
+        base.ReturnDefaultSpeed();
+        
+        moveSpeed = defaultMoveSpeed;
+    }
+
+    public override void SlowEntityBy(float _slowPercentage, float _slowDuration)
+    {
+        moveSpeed = moveSpeed * ( 1 -  _slowPercentage);
+        anim.speed = anim.speed * (1 - _slowPercentage);
+        
+        Invoke("ReturnDefaultSpeed", _slowDuration);
     }
 
     public virtual bool CanBeStunned()

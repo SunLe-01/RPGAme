@@ -19,7 +19,8 @@ public class Entity : MonoBehaviour
 
     [Header("Knockback info")] protected bool isKnockback;
 
-
+    public System.Action onFlipped;
+    
     public int facingDir { get; private set; } = 1;
 
     protected virtual void Awake()
@@ -32,10 +33,22 @@ public class Entity : MonoBehaviour
         fx = GetComponent<EntityFX>();
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        stats = GetComponent<CharacterStats>();
+        cd = GetComponent<CapsuleCollider2D>();
     }
 
     protected virtual void Update()
     {
+    }
+
+    public virtual void SlowEntityBy(float _slowPercentage,float _slowDuration)
+    {
+        
+    }
+
+    protected virtual void ReturnDefaultSpeed()
+    {
+        anim.speed = 1;
     }
 
     #region Component
@@ -44,6 +57,8 @@ public class Entity : MonoBehaviour
     public Rigidbody2D rb { get; private set; }
     public EntityFX fx { get; private set; }
     public SpriteRenderer sr { get; private set; }
+    public CharacterStats stats { get; private set; }
+    public CapsuleCollider2D cd { get; private set; }
     
     #endregion
 
@@ -68,15 +83,15 @@ public class Entity : MonoBehaviour
 
     #endregion
 
+    public virtual void DamageImpact()
+    {
+        //在收到伤害的同时被击退
+        StartCoroutine("knockback"); 
+    }
+    
+    
     #region Cllision
 
-    public virtual void damage()
-    {
-        fx.StartCoroutine("flashFx");
-        //在收到伤害的同时被击退
-        StartCoroutine("knockback");
-        Debug.Log(gameObject.name + " damaged");
-    }
 
     public virtual IEnumerator knockback()
     {
@@ -108,16 +123,19 @@ public class Entity : MonoBehaviour
             new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
         Gizmos.DrawWireSphere(attackCheck.position, attackCheckRadius);
     }
-
+    
     #endregion
 
-    #region Flip
-
+    #region Flip  
+   
     public virtual void Flip()
     {
         facingDir *= -1;
         facingRight = !facingRight;
         transform.Rotate(0, 180, 0);
+
+        if (onFlipped != null)
+            onFlipped();
     }
 
     public virtual void FlipController(float _x)
@@ -129,13 +147,10 @@ public class Entity : MonoBehaviour
 
     #endregion
 
-    public void MakeTransparent(bool _transparent)
+
+
+    public virtual void Die()
     {
-        if (_transparent)
-            sr.color = Color.clear;
-        else
-        {
-            sr.color = Color.white;
-        }
+        
     }
 }
